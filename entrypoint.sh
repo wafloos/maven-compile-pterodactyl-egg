@@ -7,7 +7,7 @@ INTERNAL_IP=$(ip route get 1 | awk '{print $(NF-2);exit}')
 export INTERNAL_IP
 
 
-PLUGIN_DIR=${PLUGIN_DIR:-plugin-1}
+PLUGIN_DIR=${PLUGIN_DIR}
 export PLUGIN_DIR
 
 PLUGIN_PATH="/home/container/${PLUGIN_DIR}"
