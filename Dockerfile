@@ -6,11 +6,12 @@ ARG CONTAINER_GID=1000
 RUN apk add --no-cache su-exec \
  && addgroup -g "${CONTAINER_GID}" container || true \
  && adduser -D -u "${CONTAINER_UID}" -G container -h /home/container container \
- && mkdir -p /home/container /home/container/artifacts \
+ && mkdir -p /home/container /home/container/artifacts
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod 755 /entrypoint.sh \
+ && chown root:root /entrypoint.sh \
  && chown -R container:container /home/container
-
-COPY ./entrypoint.sh /entrypoint.sh
-
 
 ENV HOME=/home/container \
     PLUGIN_PATHS=/home/container/* \
@@ -25,4 +26,5 @@ ENV HOME=/home/container \
 WORKDIR /home/container
 USER container
 
-ENTRYPOINT ["/entrypoint.sh"]
+# Run via sh so the script only needs to be readable (avoids exec bit problems)
+ENTRYPOINT ["sh", "/entrypoint.sh"]
